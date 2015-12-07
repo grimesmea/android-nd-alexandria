@@ -1,6 +1,7 @@
 package it.jaschke.alexandria;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -71,6 +72,15 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                     ((Callback) getActivity())
                             .onItemSelected(cursor.getString(cursor.getColumnIndex(AlexandriaContract.BookEntry._ID)));
                 }
+            }
+        });
+
+        View fab = rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent AddIntent = new Intent(getActivity(), AddBookActivity.class);
+                getActivity().startActivity(AddIntent);
             }
         });
 

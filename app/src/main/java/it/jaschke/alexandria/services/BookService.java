@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +22,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import it.jaschke.alexandria.MainActivity;
+import it.jaschke.alexandria.AddBookActivity;
 import it.jaschke.alexandria.R;
 import it.jaschke.alexandria.data.AlexandriaContract;
 
@@ -73,18 +72,16 @@ public class BookService extends IntentService {
      * parameters.
      */
     private void fetchBook(String ean) {
+        Intent messageIntent;
 
         if (ean.length() != 13) {
             return;
         }
 
         if (!isNetworkAvailable()) {
-            Context context = getApplicationContext();
-            CharSequence text = "Cannot search for book. Network access is not available at this time.";
-            int duration = Toast.LENGTH_SHORT;
-
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            messageIntent = new Intent(AddBookActivity.MESSAGE_EVENT);
+            messageIntent.putExtra(AddBookActivity.MESSAGE_KEY, getResources().getString(R.string.no_network_access));
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
             return;
         }
 
@@ -98,6 +95,9 @@ public class BookService extends IntentService {
 
         if (bookEntry.getCount() > 0) {
             bookEntry.close();
+            messageIntent = new Intent(AddBookActivity.MESSAGE_EVENT);
+            messageIntent.putExtra(AddBookActivity.MESSAGE_KEY, getResources().getString(R.string.book_in_library));
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
             return;
         }
 
@@ -153,7 +153,6 @@ public class BookService extends IntentService {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-
         }
 
         final String ITEMS = "items";
@@ -174,8 +173,8 @@ public class BookService extends IntentService {
             if (bookJson.has(ITEMS)) {
                 bookArray = bookJson.getJSONArray(ITEMS);
             } else {
-                Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
-                messageIntent.putExtra(MainActivity.MESSAGE_KEY, getResources().getString(R.string.not_found));
+                messageIntent = new Intent(AddBookActivity.MESSAGE_EVENT);
+                messageIntent.putExtra(AddBookActivity.MESSAGE_KEY, getResources().getString(R.string.not_found));
                 LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
                 return;
             }

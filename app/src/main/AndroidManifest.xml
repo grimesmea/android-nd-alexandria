@@ -25,12 +25,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BarcodeCaptureActivity"
-            android:label="@string/barcode_capture_label"
+            android:name=".AddBookActivity"
+            android:label="@string/title_activity_add_book"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".BarcodeCaptureActivity"
+            android:label="@string/barcode_capture_label"
+            android:parentActivityName=".AddBookActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AddBookActivity" />
         </activity>
         <activity
             android:name=".SettingsActivity"
@@ -49,7 +57,6 @@
         <service
             android:name=".services.BookService"
             android:exported="false" />
-
     </application>
 
 </manifest>
