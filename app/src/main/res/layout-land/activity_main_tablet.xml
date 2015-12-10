@@ -16,7 +16,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:background="@color/primary"
-        android:elevation="2dp"/>
+        android:elevation="2dp" />
 
     <FrameLayout
         android:id="@+id/right_container"

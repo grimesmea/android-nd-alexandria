@@ -29,13 +29,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     public ListOfBooks() {
     }
 
-    /**
-     * ListOfBooksCallback for when an item has been selected.
-     */
-    public interface Callback {
-        void onItemSelected(String ean);
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,5 +127,12 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         bookListAdapter.swapCursor(null);
+    }
+
+    /**
+     * ListOfBooksCallback for when an item has been selected.
+     */
+    public interface Callback {
+        void onItemSelected(String ean);
     }
 }

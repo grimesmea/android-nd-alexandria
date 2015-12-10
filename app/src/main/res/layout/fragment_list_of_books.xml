@@ -52,7 +52,7 @@
             android:layout_marginLeft="0dp"
             android:layout_toRightOf="@id/searchButton"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"/>
+            android:paddingRight="8dp" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
