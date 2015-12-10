@@ -13,4 +13,13 @@
         <item name="displayOptions">useLogo|showHome</item>
         <item name="logo">@drawable/ic_launcher</item>
     </style>
+
+    <style name="AboutTheme" parent="AppTheme">
+        <item name="actionBarStyle">@style/ActionBar.Solid.Alexandria</item>
+    </style>
+
+    <!-- About activity action bar styles -->
+    <style name="ActionBar.Solid.Alexandria" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="displayOptions">showTitle|showHome</item>
+    </style>
 </resources>

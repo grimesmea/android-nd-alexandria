@@ -55,8 +55,9 @@ public class MainActivity extends AppCompatActivity implements ListOfBooks.Callb
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
+        if (id == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -75,11 +76,11 @@ public class MainActivity extends AppCompatActivity implements ListOfBooks.Callb
         args.putString(BookDetail.EAN_KEY, ean);
 
         if (findViewById(rightContainer) != null) {
-            BookDetail fragment = new BookDetail();
-            fragment.setArguments(args);
+            BookDetail detailFragment = new BookDetail();
+            detailFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(rightContainer, fragment)
+                    .replace(rightContainer, detailFragment)
                     .addToBackStack("Book Detail")
                     .commit();
         } else {

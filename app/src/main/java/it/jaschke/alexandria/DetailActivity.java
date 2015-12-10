@@ -16,11 +16,11 @@ public class DetailActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putString(BookDetail.EAN_KEY, getIntent().getExtras().getString(BookDetail.EAN_KEY));
 
-            BookDetail fragment = new BookDetail();
-            fragment.setArguments(args);
+            BookDetail detailFragment = new BookDetail();
+            detailFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.book_detail_container, fragment)
+                    .add(R.id.book_detail_container, detailFragment)
                     .commit();
         }
     }
