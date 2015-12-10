@@ -29,7 +29,7 @@ public class AddBookActivity extends AppCompatActivity {
 
         Fragment fragmentAddBook = new AddBook();
         fragmentAddBook.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentAddBook).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.add_book_container, fragmentAddBook).commit();
     }
 
     @Override

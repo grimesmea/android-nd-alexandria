@@ -4,21 +4,16 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import it.jaschke.alexandria.api.Callback;
 
 
-public class MainActivity extends ActionBarActivity implements Callback {
+public class MainActivity extends AppCompatActivity implements ListOfBooks.Callback {
 
     public static boolean IS_TABLET = false;
 
     private CharSequence title;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +23,7 @@ public class MainActivity extends ActionBarActivity implements Callback {
             setContentView(R.layout.activity_main_tablet);
         } else {
             setContentView(R.layout.activity_main);
+            getSupportActionBar().setElevation(0f);
         }
 
         title = getTitle();
@@ -45,18 +41,10 @@ public class MainActivity extends ActionBarActivity implements Callback {
         title = getString(titleId);
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(title);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
-        restoreActionBar();
         return true;
     }
 
@@ -82,25 +70,23 @@ public class MainActivity extends ActionBarActivity implements Callback {
 
     @Override
     public void onItemSelected(String ean) {
+        int rightContainer = R.id.right_container;
         Bundle args = new Bundle();
         args.putString(BookDetail.EAN_KEY, ean);
 
-        BookDetail fragment = new BookDetail();
-        fragment.setArguments(args);
+        if (findViewById(rightContainer) != null) {
+            BookDetail fragment = new BookDetail();
+            fragment.setArguments(args);
 
-        int id = R.id.container;
-        if (findViewById(R.id.right_container) != null) {
-            id = R.id.right_container;
+            getSupportFragmentManager().beginTransaction()
+                    .replace(rightContainer, fragment)
+                    .addToBackStack("Book Detail")
+                    .commit();
+        } else {
+            Intent intent = new Intent(this, DetailActivity.class)
+                    .putExtras(args);
+            startActivity(intent);
         }
-        getSupportFragmentManager().beginTransaction()
-                .replace(id, fragment)
-                .addToBackStack("Book Detail")
-                .commit();
-
-    }
-
-    public void goBack(View view) {
-        getSupportFragmentManager().popBackStack();
     }
 
     private boolean isTablet() {
@@ -108,13 +94,4 @@ public class MainActivity extends ActionBarActivity implements Callback {
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
-
-    @Override
-    public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
-            finish();
-        }
-        super.onBackPressed();
-    }
-
 }

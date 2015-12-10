@@ -1,6 +1,5 @@
 package it.jaschke.alexandria;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import it.jaschke.alexandria.api.BookListAdapter;
-import it.jaschke.alexandria.api.Callback;
 import it.jaschke.alexandria.data.AlexandriaContract;
 
 
@@ -29,6 +27,13 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     private EditText searchText;
 
     public ListOfBooks() {
+    }
+
+    /**
+     * ListOfBooksCallback for when an item has been selected.
+     */
+    public interface Callback {
+        void onItemSelected(String ean);
     }
 
     @Override
@@ -93,7 +98,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-
         final String selection = AlexandriaContract.BookEntry.TITLE + " LIKE ? OR " + AlexandriaContract.BookEntry.SUBTITLE + " LIKE ? ";
         String searchString = searchText.getText().toString();
 
@@ -130,11 +134,5 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         bookListAdapter.swapCursor(null);
-    }
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        activity.setTitle(R.string.books);
     }
 }

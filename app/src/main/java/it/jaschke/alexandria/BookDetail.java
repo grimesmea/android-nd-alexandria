@@ -44,14 +44,13 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            ean = arguments.getString(BookDetail.EAN_KEY);
+        Bundle args = getArguments();
+        if (args != null) {
+            ean = args.getString(BookDetail.EAN_KEY);
             getLoaderManager().restartLoader(LOADER_ID, null, this);
         }
 
-        rootView = inflater.inflate(R.layout.fragment_full_book, container, false);
+        rootView = inflater.inflate(R.layout.fragment_book_detail, container, false);
         rootView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +61,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+
         return rootView;
     }
 
@@ -119,11 +119,6 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
         ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
-
-        if (rootView.findViewById(R.id.right_container) != null) {
-            rootView.findViewById(R.id.backButton).setVisibility(View.INVISIBLE);
-        }
-
     }
 
     @Override
