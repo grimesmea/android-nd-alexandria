@@ -16,7 +16,9 @@ public class AddBookActivity extends AppCompatActivity {
 
     public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
     public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
+    private final String ADD_BOOK_FRAGMENT_TAG = "addBookFragment";
     private BroadcastReceiver messageReceiver;
+    private Fragment fragmentAddBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +29,23 @@ public class AddBookActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, filter);
 
-        Fragment fragmentAddBook = new AddBook();
-        fragmentAddBook.setArguments(getIntent().getExtras());
-        getSupportFragmentManager().beginTransaction().replace(R.id.add_book_container, fragmentAddBook).commit();
+        if (findViewById(R.id.add_book_container) != null) {
+            // If savedInstanceState is null, create a new fragment; otherwise, a configuration change
+            // has occurred and the fragment does not need to be recreated
+            if (savedInstanceState == null) {
+                fragmentAddBook = new AddBook();
+                fragmentAddBook.setArguments(getIntent().getExtras());
+                getSupportFragmentManager().beginTransaction()
+                        .replace(
+                                R.id.add_book_container,
+                                fragmentAddBook,
+                                ADD_BOOK_FRAGMENT_TAG)
+                        .commit();
+            } else {
+                fragmentAddBook = getSupportFragmentManager()
+                        .findFragmentByTag(ADD_BOOK_FRAGMENT_TAG);
+            }
+        }
     }
 
     @Override

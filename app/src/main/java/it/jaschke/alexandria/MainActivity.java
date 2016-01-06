@@ -3,7 +3,6 @@ package it.jaschke.alexandria;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,12 +11,14 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements ListOfBooks.Callback {
 
     public static boolean IS_TABLET = false;
-
+    private final String LIST_FRAGMENT_TAG = "listOfBooksFragment";
     private CharSequence title;
+    private ListOfBooks listFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         IS_TABLET = isTablet();
         if (IS_TABLET) {
             setContentView(R.layout.activity_main_tablet);
@@ -28,13 +29,23 @@ public class MainActivity extends AppCompatActivity implements ListOfBooks.Callb
 
         title = getTitle();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        ListOfBooks listFragment = new ListOfBooks();
-
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, listFragment)
-                .addToBackStack((String) title)
-                .commit();
+        if (findViewById(R.id.container) != null) {
+            // If savedInstanceState is null, create a new fragment; otherwise, a configuration change
+            // has occurred and the fragment does not need to be recreated
+            if (savedInstanceState == null) {
+                listFragment = new ListOfBooks();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(
+                                R.id.container,
+                                listFragment,
+                                LIST_FRAGMENT_TAG)
+                        .addToBackStack((String) title)
+                        .commit();
+            } else {
+                listFragment = (ListOfBooks) getSupportFragmentManager()
+                        .findFragmentByTag(LIST_FRAGMENT_TAG);
+            }
+        }
     }
 
     public void setTitle(int titleId) {

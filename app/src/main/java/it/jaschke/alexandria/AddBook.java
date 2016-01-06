@@ -33,6 +33,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private final int LOADER_ID = 1;
     private final String EAN_CONTENT = "eanContent";
     private EditText ean;
+    private String editTextString;
     private View rootView;
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
@@ -42,10 +43,11 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (ean != null) {
-            outState.putString(EAN_CONTENT, ean.getText().toString());
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Check savedInstanceState for previously entered search text (after configuration change)
+        if (savedInstanceState != null && savedInstanceState.containsKey(EAN_CONTENT)) {
+            editTextString = savedInstanceState.getString(EAN_CONTENT);
         }
     }
 
@@ -128,12 +130,33 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             }
         });
 
-        if (savedInstanceState != null) {
-            ean.setText(savedInstanceState.getString(EAN_CONTENT));
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Set EditText, ean, in the event that the onSaveInstanceState bundle included include the
+        // editTextString (restores entered text on configuration change)
+        if (editTextString != null) {
+            ean.setText(editTextString);
             ean.setHint("");
         }
+    }
 
-        return rootView;
+    @Override
+    public void onPause() {
+        // Save EditText, ean, so that if can be saved, and restored, using onSaveInstanceState
+        editTextString = ean.getText().toString();
+        super.onPause();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (editTextString != null) {
+            outState.putString(EAN_CONTENT, editTextString);
+        }
     }
 
     private void restartLoader() {

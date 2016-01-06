@@ -20,11 +20,14 @@ import it.jaschke.alexandria.data.AlexandriaContract;
 
 public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    private static final String LOG_TAG = ListOfBooks.class.getSimpleName();
+    private final String EDIT_TEXT_CONTENT = "editTextContent";
     private final int LOADER_ID = 10;
     private BookListAdapter bookListAdapter;
     private ListView bookList;
     private int position = ListView.INVALID_POSITION;
     private EditText searchText;
+    private String editTextString;
 
     public ListOfBooks() {
     }
@@ -32,6 +35,10 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Check savedInstanceState for previously entered search text (after configuration change)
+        if (savedInstanceState != null && savedInstanceState.containsKey(EDIT_TEXT_CONTENT)) {
+            editTextString = savedInstanceState.getString(EDIT_TEXT_CONTENT);
+        }
     }
 
     @Override
@@ -44,7 +51,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
                 null, // values for "where" clause
                 null  // sort order
         );
-
 
         bookListAdapter = new BookListAdapter(getActivity(), cursor, 0);
         View rootView = inflater.inflate(R.layout.fragment_list_of_books, container, false);
@@ -83,6 +89,32 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Set EditText, searchText, in the event that the onSaveInstanceState bundle included
+        // include the editTextString (restores entered text on configuration change)
+        if (editTextString != null) {
+            searchText.setText(editTextString);
+        }
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Save EditText, ean, so that if can be saved, and restored, using onSaveInstanceState
+        editTextString = searchText.getText().toString();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (searchText != null) {
+            outState.putString(EDIT_TEXT_CONTENT, editTextString);
+        }
     }
 
     private void restartLoader() {
