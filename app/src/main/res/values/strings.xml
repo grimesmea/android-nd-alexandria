@@ -9,8 +9,9 @@
 
     <string name="action_settings">Settings</string>
     <string name="scan_button">Scan</string>
-    <string name="input_hint">Insert ISBN-13. Digits only.</string>
-    <string name="book_cover">Bookcover</string>
+    <string name="input_hint">Enter ISBN-13. Digits only.</string>
+    <string name="book_cover">Book Cover</string>
+    <string name="book_added">Book Added to Library!</string>
 
     <string name="ok_button">Next</string>
     <string name="cancel_button">Cancel</string>
@@ -19,18 +20,16 @@
     <string name="book_in_library">Book is already in your library.</string>
     <string name="search">Search</string>
     <string name="delete">Delete Book</string>
-    <string name="pref_startScreen">Select Startscreen</string>
-    <string name="pref_startFragment_key">pref_startFragment</string>
-    <string name="title_activity_settings">Settings</string>
     <string name="action_share">Share</string>
     <string name="share_text">A must read book: </string>
 
-    <string name="about_text">This application gets book information from a Google API. All titles, cover images, and author information come from there. /n
-    The original version of this app was built by Sascha Jaschke. A modified version was given to students in the Udacity Android Nanodegree program.
-    Changes made to the version provided by Udacity made by Mary Grimes.</string>
+    <string name="about_text">This application gets book information from a Google API. All titles,
+        cover images, and author information come from there.\n\nThe original version of this app
+        was built by Sascha Jaschke. A modified version was given to students in the Udacity Android
+        Nanodegree program.Changes made to the version provided by Udacity made by Mary Grimes.
+    </string>
     <string name="barcode_capture_label">Scan Barcode</string>
-    <string name="title_activity_add_book">AddBookActivity</string>
-    <string name="title_activity_detail">DetailActivity</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_about">AboutActivity</string>
+    <string name="title_activity_add_book" translatable="false">AddBookActivity</string>
+    <string name="title_activity_detail" translatable="false">DetailActivity</string>
+    <string name="title_activity_about" translatable="false">AboutActivity</string>
 </resources>

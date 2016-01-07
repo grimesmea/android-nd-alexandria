@@ -8,14 +8,15 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 public class AddBookActivity extends AppCompatActivity {
 
     public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
     public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
+    public static boolean bookIsAlreadyInLibrary = false;
     private final String ADD_BOOK_FRAGMENT_TAG = "addBookFragment";
     private BroadcastReceiver messageReceiver;
     private Fragment fragmentAddBook;
@@ -28,6 +29,8 @@ public class AddBookActivity extends AppCompatActivity {
         messageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
         LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, filter);
+
+        bookIsAlreadyInLibrary = false;
 
         if (findViewById(R.id.add_book_container) != null) {
             // If savedInstanceState is null, create a new fragment; otherwise, a configuration change
@@ -54,33 +57,21 @@ public class AddBookActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_book, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getStringExtra(MESSAGE_KEY) != null) {
                 Toast.makeText(AddBookActivity.this, intent.getStringExtra(MESSAGE_KEY), Toast.LENGTH_LONG).show();
+                Log.d("AddBookActivity", intent.getStringExtra(MESSAGE_KEY));
+                if (intent.getStringExtra(MESSAGE_KEY).equals(getString(R.string.book_in_library))) {
+                    bookIsAlreadyInLibrary = true;
+                    Log.d("AddBookActivity", String.valueOf(bookIsAlreadyInLibrary));
+
+                    if (findViewById(R.id.add_book_container) != null) {
+                        findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
+                        findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
+                    }
+                }
             }
         }
     }

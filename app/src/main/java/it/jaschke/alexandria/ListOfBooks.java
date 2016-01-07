@@ -101,7 +101,6 @@ public class ListOfBooks extends Fragment implements LoaderManager.LoaderCallbac
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();

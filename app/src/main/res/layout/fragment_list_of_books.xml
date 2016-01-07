@@ -39,7 +39,6 @@
             android:inputType="text"
             android:saveEnabled="true" />
 
-
         <ListView
             android:id="@+id/listOfBooks"
             android:layout_width="match_parent"

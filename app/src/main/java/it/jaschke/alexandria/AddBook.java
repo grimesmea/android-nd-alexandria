@@ -88,7 +88,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             }
         });
 
-        Bundle args = getArguments();
+        final Bundle args = getArguments();
         if (args != null) {
             String barcode = args.getString("barcode");
             if (barcode != null) {
@@ -109,9 +109,10 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 ean.setText("");
+                args.clear();
 
                 Context context = getActivity();
-                CharSequence text = "Book Added to Library!";
+                CharSequence text = getString(R.string.book_added);
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(context, text, duration);
@@ -127,6 +128,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 bookIntent.setAction(BookService.DELETE_BOOK);
                 getActivity().startService(bookIntent);
                 ean.setText("");
+                args.clear();
             }
         });
 
@@ -140,7 +142,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         // editTextString (restores entered text on configuration change)
         if (editTextString != null) {
             ean.setText(editTextString);
-            ean.setHint("");
         }
     }
 
@@ -148,6 +149,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onPause() {
         // Save EditText, ean, so that if can be saved, and restored, using onSaveInstanceState
         editTextString = ean.getText().toString();
+        clearFields();
         super.onPause();
     }
 
@@ -207,8 +209,11 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
         ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
 
-        rootView.findViewById(R.id.save_button).setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.delete_button).setVisibility(View.VISIBLE);
+        Log.d("AddBook:", String.valueOf(AddBookActivity.bookIsAlreadyInLibrary));
+        if (AddBookActivity.bookIsAlreadyInLibrary == false) {
+            rootView.findViewById(R.id.save_button).setVisibility(View.VISIBLE);
+            rootView.findViewById(R.id.delete_button).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
