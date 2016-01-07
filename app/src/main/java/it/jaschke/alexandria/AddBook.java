@@ -197,7 +197,10 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
 
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
+        String[] authorsArr = null;
+        if (authors != null) {
+            authorsArr = authors.split(",");
+        }
         ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
         ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
@@ -209,7 +212,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
         ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
 
-        Log.d("AddBook:", String.valueOf(AddBookActivity.bookIsAlreadyInLibrary));
         if (AddBookActivity.bookIsAlreadyInLibrary == false) {
             rootView.findViewById(R.id.save_button).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.delete_button).setVisibility(View.VISIBLE);

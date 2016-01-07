@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -62,10 +61,8 @@ public class AddBookActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if (intent.getStringExtra(MESSAGE_KEY) != null) {
                 Toast.makeText(AddBookActivity.this, intent.getStringExtra(MESSAGE_KEY), Toast.LENGTH_LONG).show();
-                Log.d("AddBookActivity", intent.getStringExtra(MESSAGE_KEY));
                 if (intent.getStringExtra(MESSAGE_KEY).equals(getString(R.string.book_in_library))) {
                     bookIsAlreadyInLibrary = true;
-                    Log.d("AddBookActivity", String.valueOf(bookIsAlreadyInLibrary));
 
                     if (findViewById(R.id.add_book_container) != null) {
                         findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
